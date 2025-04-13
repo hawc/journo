@@ -2,6 +2,12 @@
 
 import OpenAI from "openai";
 
+const {
+  PROMPT,
+  PROMPT_FORMATTING,
+  OPENAI_MODEL,
+} = process.env;
+
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -12,23 +18,21 @@ interface ArticleInput {
 }
 
 export async function getMatchingArticles(input: string, articles: ArticleInput[]): Promise<string[]> {
-  const prompt = process.env.PROMPT;
+  if (!PROMPT || !PROMPT_FORMATTING || !OPENAI_MODEL) {
+    throw new Error("OpenAI config missing.");
+  }
+
+  const prompt = `${PROMPT} ${input} ${PROMPT_FORMATTING}`;
   const userContent = JSON.stringify(articles, null, 2);
 
-  console.log([
-    { role: 'system', content: prompt },
-    { role: 'user', content: userContent }
-  ]);
   const completion = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
+    model: OPENAI_MODEL,
     store: true,
     messages: [
       { role: 'system', content: prompt },
       { role: 'user', content: userContent }
     ],
   });
-
-  console.log("res", completion.choices[0].message);
 
   const result = completion.choices[0].message.content;
 

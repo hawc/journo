@@ -1,13 +1,16 @@
 import { MongoClient } from "mongodb";
 
-if (!process.env.MONGODB_URI) {
-  throw new Error('Invalid/Missing environment variable: "MONGODB_URI"');
-}
+const {
+  MONGODB_URI,
+} = process.env;
 
-const uri = process.env.MONGODB_URI;
 const options = {};
 
 let client: MongoClient;
+
+if (!MONGODB_URI) {
+  throw new Error("MongoDB URI not set.");
+}
 
 if (process.env.NODE_ENV === "development") {
   // In development mode, use a global variable so that the value
@@ -17,12 +20,12 @@ if (process.env.NODE_ENV === "development") {
   };
 
   if (!globalWithMongo._mongoClient) {
-    globalWithMongo._mongoClient = new MongoClient(uri, options);
+    globalWithMongo._mongoClient = new MongoClient(MONGODB_URI, options);
   }
   client = globalWithMongo._mongoClient;
 } else {
   // In production mode, it's best to not use a global variable.
-  client = new MongoClient(uri, options);
+  client = new MongoClient(MONGODB_URI, options);
 }
 
 // Export a module-scoped MongoClient. By doing this in a
