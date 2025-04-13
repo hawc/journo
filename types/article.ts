@@ -6,5 +6,5 @@ export interface Article {
   teaser: string;
   content: string;
   url: string;
-  date: Date;
+  date: string;
 }

@@ -1,40 +1,59 @@
 "use client";
 
-import { FormEventHandler, useCallback, useEffect, useMemo, useState } from "react";
+import classNames from "classnames";
+import { FormEvent, useCallback, useEffect, useState } from "react";
+
 import { Article } from "../../types/article";
 import { ArticleList } from "../article-list/ArticleList";
 import { BookmarkedArticles } from "../bookmarked-articles/BookmarkedArticles";
-
+import { Checkbox } from "../checkbox/Checkbox";
 import { ClientOnly } from "../client-only/ClientOnly";
 import { Input } from "../input/Input";
 import { SubmitButton } from "../submit-button/SubmitButton";
 import { SystemMessage } from "../system-message/SystemMessage";
+
 import styles from "./SearchArticles.module.scss";
 
 const placeholders = [
-  "Texte mit persönlichem Bezug",
-  "Tiergeschichten",
-  "Polizeimeldungen",
-  "Texte aus Bayern",
-  "Traurige Geschichten",
+  "Haustiere",
+  "Polizei",
+  "Bayern",
+  "Lokales",
 ];
 
-interface SearchArticlesProps {
-  articles: Article[];
-}
-
-export function SearchArticles({ articles }: SearchArticlesProps) {
+export function SearchArticles() {
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [includeNews, setIncludeNews] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [placeholder, setPlaceholder] = useState(placeholders[0]);
-  const [articleIds, setArticleIds] = useState<string[]>([]);
-  const [warning, setWarning] = useState("Hey! Gib mir ein Thema und ich finde passende Texte dazu.");
+  const [warning, setWarning] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
 
-  const filteredArticles = useMemo(() => articles.filter((article) =>
-    articleIds.includes(article._id)
-  ), [articleIds, articles]);
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const query = params.get("q");
+    if (query) {
+      setInputValue(query);
+    };
+  }, []);
 
-  const handleGetArticles: FormEventHandler = useCallback(async (event) => {
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (inputValue) {
+      params.set("q", inputValue);
+    } else {
+      params.delete("q");
+    }
+
+    const parameters = params.size > 0 ? `?${params.toString()}` : "";
+    const newUrl = `${window.location.pathname}${parameters}`;
+
+    window.history.replaceState({}, "", newUrl);
+  }, [inputValue]);
+
+
+  const handleGetArticles = useCallback(async (event: FormEvent) => {
     event.preventDefault();
 
     if (!inputValue) {
@@ -49,15 +68,15 @@ export function SearchArticles({ articles }: SearchArticlesProps) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ userPrompt: inputValue }),
+      body: JSON.stringify({ userPrompt: inputValue || placeholder, includeNews }),
     });
     const data = await response.json();
 
+    setHasSearched(true);
     setIsLoading(false);
-    setArticleIds(data);
-  }, [inputValue]);
+    setArticles(data);
+  }, [placeholder, inputValue, includeNews]);
 
-  // rotate placeholder every 5 seconds
   const rotatePlaceholder = useCallback(() => {
     const randomIndex = Math.floor(Math.random() * placeholders.length);
     const newPlaceholder = placeholders[randomIndex];
@@ -67,31 +86,34 @@ export function SearchArticles({ articles }: SearchArticlesProps) {
   }, [placeholder, placeholders]);
 
   useEffect(() => {
-    setTimeout(rotatePlaceholder, 5000);
-  }, []);
+    const timeout = setTimeout(rotatePlaceholder, 4000);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [placeholder]);
 
   return (
     <>
-      <form
-        onSubmit={handleGetArticles} className={styles["input-container"]}>
-        <Input value={inputValue} placeholder={placeholder} disabled={isLoading} onChange={setInputValue} />
-        <SubmitButton disabled={isLoading} isLoading={isLoading} />
+      <form onSubmit={handleGetArticles} className={styles["input-container"]}>
+        <div className={styles["form-row"]}>
+          <Input value={inputValue} placeholder={`z.B. ${placeholder}`} disabled={isLoading} onChange={setInputValue} />
+          <SubmitButton disabled={isLoading} isLoading={isLoading} />
+        </div>
+        <Checkbox disabled={isLoading} label="Suche auch überregional" value={includeNews} onChange={setIncludeNews} />
       </form>
       <div className={styles.content}>
-        {isLoading && (
-          <SystemMessage>Lädt...</SystemMessage>
-        )}
         {warning && (
           <SystemMessage>{warning}</SystemMessage>
         )}
         <ClientOnly>
-          {!isLoading && !warning && (
-            <>
+          {!warning && hasSearched && (
+            <div className={classNames(styles.results, isLoading && styles.loading)}>
               <h2>Deine Suchergebnisse</h2>
-              <ArticleList articles={filteredArticles} />
-            </>
+              <ArticleList articles={articles} />
+            </div>
           )}
-          <BookmarkedArticles articles={articles} />
+          <BookmarkedArticles />
         </ClientOnly>
       </div>
     </>

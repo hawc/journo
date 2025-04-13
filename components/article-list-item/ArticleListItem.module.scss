@@ -4,8 +4,16 @@
 }
 
 .wrapper {
-  padding-inline: 2rem;
-  margin-inline: -2rem;
+  padding-left: 2rem;
+  max-width: 100%;
+  min-width: 100%;
+  align-self: end;
+
+  @media (min-width: 900px) {
+    max-width: unset;
+    margin-left: -2rem;
+    min-width: calc(100% + 2rem);
+  }
 }
 
 .title {
@@ -13,11 +21,15 @@
 }
 
 .bookmark {
-  display: none;
+  display: block;
   position: absolute;
   top: -0.25rem;
   left: 0;
   transform: translateX(-100%);
+
+  @media (min-width: 900px) {
+    display: none;
+  }
 }
 
 .wrapper:hover .bookmark,

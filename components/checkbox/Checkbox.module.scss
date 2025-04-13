@@ -1,0 +1,45 @@
+.checkbox {
+  display: flex;
+  justify-content: center;
+  appearance: none;
+  border-radius: 0.25rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  z-index: 3;
+  position: relative;
+  box-shadow: 0 0 1rem rgba(0, 0, 50, 0.1);
+  background-color: var(--color-background);
+  cursor: pointer;
+
+  .disabled & {
+    cursor: default;
+  }
+
+  &:checked::after {
+    content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>');
+ 
+    .disabled & {
+      opacity: 0.5;
+    }
+  }
+}
+
+.label {
+  line-height: 1;
+
+  .disabled & {
+    opacity: 0.5;
+  }
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  cursor: pointer;
+  gap: 0.5rem;
+
+  &.disabled {
+    cursor: default;
+  }
+}

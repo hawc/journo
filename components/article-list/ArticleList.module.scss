@@ -1,0 +1,22 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.article {
+  opacity: 0;
+  transition: max-height 4s, opacity 2s;
+  max-height: 0;
+
+  @for $i from 1 through 10 {
+    &:nth-child(#{$i}) {
+      transition-delay: #{($i - 1) * 0.2}s;
+    }
+  }
+}
+
+.open {
+  max-height: 1000px;
+  opacity: 1;
+}

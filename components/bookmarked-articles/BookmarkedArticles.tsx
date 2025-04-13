@@ -1,32 +1,24 @@
 "use client";
 
 import { useLocalStorage } from "@uidotdev/usehooks";
-import { useMemo } from "react";
 import { Article } from "../../types/article";
 import { ArticleList } from "../article-list/ArticleList";
 
-interface BookmarkedArticlesProps {
-  articles: Article[];
-}
+import styles from "./BookmarkedArticles.module.scss";
 
-export function BookmarkedArticles({ articles }: BookmarkedArticlesProps) {
-  const [bookmarks] = useLocalStorage<string[]>("bookmarks", []);
+export function BookmarkedArticles() {
+  const [bookmarks] = useLocalStorage<Article[]>("bookmarks", []);
 
-  const bookmarkedArticles = useMemo(() => {
-    return articles.filter((article) =>
-      bookmarks.includes(article._id)
-    );
-  }, [articles, bookmarks]);
-
-  if (bookmarkedArticles.length === 0) {
+  if (bookmarks.length === 0) {
     return;
   }
 
   return (
     <>
-      <hr />
-      <h2>Gespeicherte Artikel</h2>
-      <ArticleList articles={bookmarkedArticles} />
+      <div className={styles.bookmarks}>
+        <h2>Gespeicherte Artikel</h2>
+      </div>
+      <ArticleList articles={bookmarks} />
     </>
   );
 }
