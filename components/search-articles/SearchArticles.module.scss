@@ -1,0 +1,14 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  max-width: 900px;
+  margin: 4rem auto;
+  gap: 2rem;
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}

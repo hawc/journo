@@ -4,29 +4,37 @@ import { Bookmark, BookmarkCheck } from "lucide-react";
 import { useCallback } from "react";
 import { Article } from "../../types/article";
 
+import classNames from "classnames";
+
+import { useLocalStorage } from "@uidotdev/usehooks";
+import { bookmarkArticle } from "../../lib/bookmark";
+import styles from "./ArticleListItem.module.scss";
+
 interface ArticleListItemProps {
   article: Article;
-  bookmarks: string[];
-  setBookmark: (article: Article) => void;
 }
 
-export function ArticleListItem({ article, bookmarks, setBookmark }: ArticleListItemProps) {
+export function ArticleListItem({ article }: ArticleListItemProps) {
+  const [bookmarks, setBookmarks] = useLocalStorage<string[]>("bookmarks", []);
+
   const isBookmarked = bookmarks.includes(article._id);
 
   const handleSetBookmark = useCallback(() => {
-    setBookmark(article);
+    const updatedBookmarks = bookmarkArticle(bookmarks, article);
+
+    setBookmarks(updatedBookmarks);
   }, [article]);
 
   return (
-    <div className="article-wrapper" key={article._id}>
-      <div className="article-header">
+    <div className={styles.wrapper} key={article._id}>
+      <div className={styles.header}>
         <small>{article.sourceName} ({new Date(article.date).toLocaleDateString()})</small>
       </div>
-      <div className="article-title">
-        <div className={isBookmarked ? "article-bookmark is-bookmarked" : "article-bookmark"}>
+      <div className={styles.title}>
+        <div className={classNames(styles.bookmark, isBookmarked && styles["is-bookmarked"])}>
           <button
             type="button"
-            className="bookmark-button"
+            className={styles["bookmark-button"]}
             onClick={handleSetBookmark}
           >
             {isBookmarked ? <BookmarkCheck /> : <Bookmark />}

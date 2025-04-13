@@ -1,24 +1,14 @@
-"use client";
-
-import { useCallback } from "react";
-import { bookmarkArticle } from "../../lib/bookmark";
 import { Article } from "../../types/article";
 import { ArticleListItem } from "../article-list-item/ArticleListItem";
+import { SystemMessage } from "../system-message/SystemMessage";
 
 interface ArticleListProps {
   articles: Article[];
-  bookmarks: string[];
-  setBookmarks: (bookmarks: string[]) => void;
 }
 
-export function ArticleList({ articles, bookmarks, setBookmarks }: ArticleListProps) {
-  const setBookmark = useCallback((article: Article) => {
-    const updatedBookmarks = bookmarkArticle(article);
-    setBookmarks(updatedBookmarks);
-  }, []);
-
+export function ArticleList({ articles }: ArticleListProps) {
   if (articles.length === 0) {
-    return <p className="warning">Keine Artikel gefunden</p>;
+    return <SystemMessage>Keine Artikel gefunden</SystemMessage>;
   }
 
   return (
@@ -27,8 +17,6 @@ export function ArticleList({ articles, bookmarks, setBookmarks }: ArticleListPr
         <ArticleListItem
           key={article._id}
           article={article}
-          bookmarks={bookmarks}
-          setBookmark={setBookmark}
         />
       ))}
     </>

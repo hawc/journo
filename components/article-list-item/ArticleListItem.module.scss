@@ -1,0 +1,26 @@
+
+.header {
+  font-style: italic;
+}
+
+.wrapper {
+  padding-inline: 2rem;
+  margin-inline: -2rem;
+}
+
+.title {
+  position: relative;
+}
+
+.bookmark {
+  display: none;
+  position: absolute;
+  top: -0.25rem;
+  left: 0;
+  transform: translateX(-100%);
+}
+
+.wrapper:hover .bookmark,
+.bookmark.is-bookmarked {
+  display: block;
+}

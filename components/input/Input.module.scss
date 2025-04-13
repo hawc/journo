@@ -1,0 +1,22 @@
+.input {
+  border: none;
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+  max-width: 600px;
+  margin-left: 48px;
+  width: 80%;
+  box-shadow: 0 0 2rem rgba(0, 0, 50, 0.1);
+  transition: box-shadow 0.3s;
+  font-family: inherit;
+  font-size: 18px;
+}
+
+.input[disabled] {
+  background-color: var(--color-background);
+  color: var(--color-secondary)
+}
+
+.input:not([disabled]):focus,
+.input:not([disabled]):hover {
+  box-shadow: 0 0 4rem rgba(0, 0, 50, 0.2);
+}
