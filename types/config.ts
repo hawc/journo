@@ -1,10 +1,10 @@
-type AttributeType = 'string' | 'number' | 'boolean' | 'date' | 'object' | 'array';
+export type AttributeType = 'string' | 'number' | 'boolean' | 'date' | 'object' | 'array';
 
-type ContentType = 'text' | 'html' | 'attribute';
+export type ContentType = 'text' | 'html' | 'attribute';
 
-type Count = 'unique' | 'multiple';
+export type Count = 'unique' | 'multiple';
 
-type Framework = 'bineos' | 'ippen';
+export type Framework = 'bineos' | 'ippen';
 
 interface Selector {
   selector: string;

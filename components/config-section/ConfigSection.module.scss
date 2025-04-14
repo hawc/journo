@@ -1,0 +1,14 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  input {
+    width: 40%;
+  }
+}
+
+.button {
+  display: flex;
+  align-self: end;
+}

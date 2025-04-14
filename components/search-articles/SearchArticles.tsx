@@ -70,6 +70,7 @@ export function SearchArticles() {
       },
       body: JSON.stringify({ userPrompt: inputValue || placeholder, includeNews }),
     });
+
     const data = await response.json();
 
     setHasSearched(true);

@@ -21,6 +21,11 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  padding-left: 48px;
+
+  input {
+    width: 80%;
+  }
 }
 
 .results {
