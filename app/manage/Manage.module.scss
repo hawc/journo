@@ -1,13 +1,22 @@
+.content {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
 .configs {
   display: grid;
   grid-template-columns: 1fr;
   flex-direction: column;
   gap: 3rem;
-  max-width: 1000px;
   width: 100%;
-  margin: 0 auto;
 
   @media (min-width: 900px) {
     grid-template-columns: 1fr 1fr;
   }
+}
+
+.login {
+  width: 100%;
+  text-align: center;
+  align-self: center;
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { MouseEvent, useCallback } from "react";
+import { MouseEvent, PropsWithChildren, useCallback } from "react";
 import styles from "./Header.module.scss";
 
 const DEFAULT_CLAIM = "Dein Tool für themenbezogene Lokalmeldungen 😎";
@@ -9,7 +9,7 @@ interface HeaderProps {
   claim?: string;
 }
 
-export function Header({ claim = DEFAULT_CLAIM }: HeaderProps) {
+export function Header({ claim = DEFAULT_CLAIM, children }: PropsWithChildren<HeaderProps>) {
   const handleClick = useCallback((event: MouseEvent) => {
     event.preventDefault();
     const main = document.querySelector("[data-page]");
@@ -25,6 +25,9 @@ export function Header({ claim = DEFAULT_CLAIM }: HeaderProps) {
         <a className={styles.link} href="/" onClick={handleClick}>Journo<span className={styles["brand-ai"]}>AI</span></a>
       </h1>
       <p className={styles.intro}>{claim}</p>
+      <p>
+        {children}
+      </p>
     </header>
   );
 }

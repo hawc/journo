@@ -1,3 +1,5 @@
+import { NextRequest, NextResponse } from "next/server";
+import { auth0 } from "../../../lib/auth0";
 import { fetchConfigs } from "../../../lib/fetchConfigs";
 import { updateConfig } from "../../../lib/updateConfig";
 import { Config } from "../../../types/config";
@@ -6,7 +8,13 @@ interface UpdateConfigInput {
   config: Config;
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+  const session = await auth0.getSession();
+
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const body = await request.json();
   const { config }: UpdateConfigInput = body;
 
@@ -44,8 +52,9 @@ export async function POST(request: Request) {
 
   const result = await updateConfig(updatedConfig);
 
-  return new Response(JSON.stringify(updatedConfig), {
-    status: 201,
-    headers: { 'Content-Type': 'application/json' }
-  });
+  if (!result) {
+    return NextResponse.json({ error: 'Failed to update config' }, { status: 500 });
+  }
+
+  return NextResponse.json({ message: 'Config updated successfully', updatedConfig }, { status: 201 });
 }
