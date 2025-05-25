@@ -43,8 +43,8 @@ export async function POST(request: Request) {
 
   const allArticles = [...articles, ...transformedNewsArticles];
 
-  const articleHeadlines = allArticles.map((article: Article) => {
-    return { _id: article._id, headline: article.headline };
+  const articleHeadlines = allArticles.map((article: Article, index) => {
+    return { _id: article._id, headline: article.headline, teaser: article.teaser };
   });
 
   const matchingArticleIds = await getMatchingArticles(userPrompt, articleHeadlines);

@@ -21,6 +21,8 @@ export async function fetchArticles() {
       .limit(ARTICLE_LIMIT)
       .toArray();
 
+    console.log(`Fetched ${articles.length} articles from DB.`);
+
     articles.forEach((article) => {
       article._id = article._id.toString();
     });
