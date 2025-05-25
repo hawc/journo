@@ -3,11 +3,12 @@
 }
 
 :root {
-  --color-primary: #000;
+  --color-primary: #111111;
   --color-primary-light: #333;
   --color-background: #fff;
   --color-secondary: #666;
   --color-accent: #0070f3;
+  --color-accent-light: #aacffa;
 }
 
 ::placeholder {
@@ -17,7 +18,7 @@
 html {
   background-color: var(--color-primary);
   margin: 0.5rem 0;
-  min-width: 600px;
+  min-width: 420px;
 }
 
 html, body {
@@ -43,7 +44,6 @@ main {
   display: flex;
   gap: 1rem;
   flex-direction: column;
-  font-size: 1.2rem;
 }
 
 h1 {
@@ -76,7 +76,13 @@ a {
   text-decoration-line: underline;
   text-decoration-thickness: 2px;
   text-underline-offset: 3px;
-  text-decoration-color: var(--color-accent);
+  text-decoration-color: var(--color-accent-light);
+  transition: text-decoration-color 0.3s;
+
+  &:hover,
+  &:focus {
+    text-decoration-color: var(--color-accent);
+  }
 }
 
 .container {

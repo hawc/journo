@@ -30,7 +30,7 @@ export function ArticleListItem({ article }: ArticleListItemProps) {
   return (
     <div className={styles.wrapper} key={article._id}>
       <div className={styles.header}>
-        <small>{article.sourceName} ({new Date(article.date).toLocaleDateString()})</small>
+        {article.sourceName} ({new Date(article.date).toLocaleDateString()})
       </div>
       <div className={styles.title}>
         <div className={classNames(styles.bookmark, isArticleBookmarked && styles["is-bookmarked"])}>
@@ -42,12 +42,10 @@ export function ArticleListItem({ article }: ArticleListItemProps) {
             {isArticleBookmarked ? <BookmarkCheck /> : <Bookmark />}
           </button>
         </div>
-        <a href={article.url} target="_blank" rel="noopener noreferrer">{article.headline}</a>
+        <a href={article.url} className={styles.headline} target="_blank" rel="noopener noreferrer">{article.headline}</a>
       </div>
       {article.teaser && (
-        <div>
-          <small>{article.teaser}</small>
-        </div>
+        <div className={styles.teaser}>{article.teaser}</div>
       )}
     </div>
   );

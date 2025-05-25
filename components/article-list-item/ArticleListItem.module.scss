@@ -1,6 +1,18 @@
 
 .header {
   font-style: italic;
+  opacity: 0.5;
+  font-size: 0.9rem;
+}
+
+.headline {
+  display: block;
+  margin-block: 0.25rem;
+  font-size: 1.25rem;
+}
+
+.teaser {
+  opacity: 0.7;
 }
 
 .wrapper {
