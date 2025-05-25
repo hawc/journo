@@ -12,10 +12,6 @@ interface ArticleListProps {
 export function ArticleList({ articles }: ArticleListProps) {
   const [loaded, setLoaded] = useState(false);
 
-  if (articles.length === 0) {
-    return <SystemMessage>Keine Artikel gefunden</SystemMessage>;
-  }
-
   useEffect(() => {
     const t = setTimeout(() => {
       setLoaded(true);
@@ -25,6 +21,10 @@ export function ArticleList({ articles }: ArticleListProps) {
       clearTimeout(t);
     };
   }, []);
+
+  if (articles.length === 0) {
+    return <SystemMessage>Keine Artikel gefunden</SystemMessage>;
+  }
 
   return (
     <div className={styles.list}>
