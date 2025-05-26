@@ -5,13 +5,13 @@ import { FormEvent, useCallback, useEffect, useState } from "react";
 
 import { Article } from "../../types/article";
 import { ArticleList } from "../article-list/ArticleList";
-import { BookmarkedArticles } from "../bookmarked-articles/BookmarkedArticles";
 import { Checkbox } from "../checkbox/Checkbox";
 import { ClientOnly } from "../client-only/ClientOnly";
 import { Input } from "../input/Input";
 import { SubmitButton } from "../submit-button/SubmitButton";
 import { SystemMessage } from "../system-message/SystemMessage";
 
+import { BookmarkedArticles } from "../bookmarked-articles/BookmarkedArticles";
 import styles from "./SearchArticles.module.scss";
 
 const placeholders = [
@@ -20,6 +20,9 @@ const placeholders = [
   "Bayern",
   "Lokales",
 ];
+
+const SEARCH_MAJOR_MEDIA = false;
+const PLACEHOLDER_ROTATION_INTERVAL = 4000;
 
 export function SearchArticles() {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -63,19 +66,24 @@ export function SearchArticles() {
     setWarning("");
     setIsLoading(true);
 
-    const response = await fetch("/api/getArticles", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ userPrompt: inputValue || placeholder, includeNews }),
-    });
+    try {
+      const response = await fetch("/api/getArticles", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userPrompt: inputValue || placeholder, includeNews }),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    setHasSearched(true);
-    setIsLoading(false);
-    setArticles(data);
+      setHasSearched(true);
+      setArticles(data);
+    } catch (error) {
+      setWarning("Fehler beim Abrufen der Artikel");
+    } finally {
+      setIsLoading(false);
+    }
   }, [placeholder, inputValue, includeNews]);
 
   const rotatePlaceholder = useCallback(() => {
@@ -87,7 +95,7 @@ export function SearchArticles() {
   }, [placeholder, placeholders]);
 
   useEffect(() => {
-    const timeout = setTimeout(rotatePlaceholder, 4000);
+    const timeout = setTimeout(rotatePlaceholder, PLACEHOLDER_ROTATION_INTERVAL);
 
     return () => {
       clearTimeout(timeout);
@@ -101,7 +109,9 @@ export function SearchArticles() {
           <Input value={inputValue} placeholder={`z.B. ${placeholder}`} disabled={isLoading} onChange={setInputValue} />
           <SubmitButton disabled={isLoading} isLoading={isLoading} />
         </div>
-        <Checkbox disabled={isLoading} label="Suche auch überregional" value={includeNews} onChange={setIncludeNews} />
+        {SEARCH_MAJOR_MEDIA && (
+          <Checkbox disabled={isLoading} label="Suche auch überregional" value={includeNews} onChange={setIncludeNews} />
+        )}
       </form>
       <div className={styles.content}>
         {warning && (
@@ -112,6 +122,11 @@ export function SearchArticles() {
             <div className={classNames(styles.results, isLoading && styles.loading)}>
               <h2>Deine Suchergebnisse</h2>
               <ArticleList articles={articles} />
+            </div>
+          )}
+          {!hasSearched && (
+            <div className={styles.placeholder}>
+              <SystemMessage>Gib einen Suchbegriff ein</SystemMessage>
             </div>
           )}
           <BookmarkedArticles />

@@ -47,7 +47,7 @@ main {
 }
 
 h1 {
-  font-size: 4.5rem;
+  font-size: 5.5rem;
   margin: 0;
   line-height: 1.2;
 }
@@ -83,14 +83,6 @@ a {
   &:focus {
     text-decoration-color: var(--color-accent);
   }
-}
-
-.container {
-  width: 100%;
-  padding: 1rem;
-      display: flex;
-    flex-direction: column;
-    align-self: center;
 }
 
 .fade-out {

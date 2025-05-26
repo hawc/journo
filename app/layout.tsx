@@ -3,8 +3,8 @@ import "./inter.css";
 import "./styles.css";
 
 export const metadata = {
-  title: 'JournoAI',
-  description: 'Dein Tool für themenbezogene Lokalmeldungen 😎',
+  title: 'Journo',
+  description: 'Dein AI-Tool für themenbezogene Lokalmeldungen 😎',
 };
 
 export default function RootLayout({

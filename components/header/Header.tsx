@@ -3,7 +3,7 @@
 import { MouseEvent, PropsWithChildren, useCallback } from "react";
 import styles from "./Header.module.scss";
 
-const DEFAULT_CLAIM = "Dein Tool für themenbezogene Lokalmeldungen 😎";
+const DEFAULT_CLAIM = "Dein AI-Tool für themenbezogene Lokalmeldungen 😎";
 
 interface HeaderProps {
   claim?: string;
@@ -22,7 +22,7 @@ export function Header({ claim = DEFAULT_CLAIM, children }: PropsWithChildren<He
   return (
     <header className={styles.header}>
       <h1 className={styles.brand}>
-        <a className={styles.link} href="/" onClick={handleClick}>Journo<span className={styles["brand-ai"]}>AI</span></a>
+        <a className={styles.link} href="/" onClick={handleClick}>Journo</a>
       </h1>
       <p className={styles.intro}>{claim}</p>
       <p>
