@@ -126,7 +126,7 @@ export function SearchArticles() {
           )}
           {!hasSearched && (
             <div className={styles.placeholder}>
-              <SystemMessage>Gib einen Suchbegriff ein</SystemMessage>
+              <SystemMessage>Gib einen Suchbegriff ein.</SystemMessage>
             </div>
           )}
           <BookmarkedArticles />
