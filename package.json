@@ -6,12 +6,12 @@
     "start": "next start"
   },
   "dependencies": {
-    "@auth0/nextjs-auth0": "^4.6.0",
+    "@auth0/nextjs-auth0": "^4.8.0",
     "@uidotdev/usehooks": "^2.4.1",
     "classnames": "^2.5.1",
     "lucide-react": "^0.511.0",
     "mongodb": "^4.8.1",
-    "next": "^15.3.2",
+    "next": "^15.4.1",
     "openai": "^4.103.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
